@@ -72,7 +72,8 @@ void ASnakeCharacter::SpawnTail(const TSubclassOf<ASnakeTail> TailClass)
 		TempLocation -= SegmentLocation;
 		FRotator Rotation = FRotator(0.0f, 0.0f, 0.0f);
 
-		ASnakeTail* TailPart = GetWorld()->SpawnActor<ASnakeTail>(TailClass, TempLocation, Rotation, SpawnInfo); // Scale of actor has been set in SnakeTailActor BP.
+		ASnakeTail* TailPart = GetWorld()->SpawnActor<ASnakeTail>(TailClass, TempLocation, Rotation, SpawnInfo);
+		// Scale of actor has been set in SnakeTailActor BP.
 		TempLocation = Location;
 
 		SnakeTails.Add(TailPart);
@@ -100,35 +101,35 @@ void ASnakeCharacter::GrowTail()
 void ASnakeCharacter::UpdateAllBodyParts()
 {
 	if (SnakeTails.Num() == 0) return;
-	
+
 	ASnakeTail* FirstBodyPart = SnakeTails[0];
 	if (!FirstBodyPart) return;
-	
+
 	FVector FirstAfterHeadLocation = FirstBodyPart->GetActorLocation();
 	FVector HeadLocation = HeadToFollow->GetComponentLocation();
-	
+
 	FTransform FirstAfterHeadTransform = FirstBodyPart->GetTransform();
 	FTransform HeadTransform = HeadToFollow->GetComponentTransform();
-	
-	
+
+
 	float Length = UKismetMathLibrary::VSize(FirstAfterHeadLocation - HeadLocation);
 	if (Length >= 100)
 	{
 		FTransform NewTransform = UKismetMathLibrary::TLerp(FirstAfterHeadTransform, HeadTransform, 0.05f);
 		FirstBodyPart->SetActorTransform(NewTransform);
 	}
-	
+
 	for (int i = SnakeTails.Num() - 1; i > 0; --i)
 	{
 		ASnakeTail* PartToMove = SnakeTails[i];
 		ASnakeTail* PartToMoveTo = SnakeTails[i - 1];
-	
+
 		FirstAfterHeadLocation = PartToMove->GetActorLocation();
 		HeadLocation = PartToMoveTo->GetActorLocation();
-	
+
 		FTransform FirstTransform = PartToMove->GetTransform();
 		FTransform NextTransform = PartToMoveTo->GetTransform();
-		
+
 		Length = UKismetMathLibrary::VSize(FirstAfterHeadLocation - HeadLocation);
 		if (Length >= 100)
 		{
@@ -151,6 +152,7 @@ void ASnakeCharacter::Turn(const FInputActionValue& Value)
 
 void ASnakeCharacter::Tick(float DeltaTime)
 {
+	if (!bCanMove) return;
 	Super::Tick(DeltaTime);
 	AddMovementInput(GetActorForwardVector(), MoveSpeed * DeltaTime);
 	UpdateAllBodyParts();

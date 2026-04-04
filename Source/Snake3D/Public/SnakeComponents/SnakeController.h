@@ -3,9 +3,11 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "InputMappingContext.h"
 #include "GameFramework/PlayerController.h"
 #include "SnakeController.generated.h"
 
+enum class ESnakeGameState : uint8;
 /**
  * 
  */
@@ -13,4 +15,28 @@ UCLASS()
 class SNAKE3D_API ASnakeController : public APlayerController
 {
 	GENERATED_BODY()
+	
+public:
+	UFUNCTION()
+	void HandleGameStateChanged(ESnakeGameState NewState);
+
+	void StartGame();
+	void ShowMainMenu();
+
+	UPROPERTY(EditAnywhere, Category = "EnhancedInput")
+	UInputMappingContext* InputMapping;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Input")
+	UInputAction* StartGameAction;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Input")
+	UInputAction* ShowMainMenuAction;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Input")
+	UInputAction* StartOutroAction;
+	
+protected:
+	void virtual SetupInputComponent() override;
+	void StartOutro();
+	void virtual BeginPlay() override;
 };

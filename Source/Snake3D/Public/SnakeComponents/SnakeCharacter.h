@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "InputActionValue.h"
+#include "SnakeController.h"
 #include "SnakeTail.h"
 #include "GameFramework/Character.h"
 #include "SnakeCharacter.generated.h"
@@ -75,6 +76,9 @@ public:
 private:
 	FActorSpawnParameters SpawnInfo;
 	TArray<ASnakeTail*> SnakeTails;
+	bool bCanMove;
+	
+	friend class ASnakeController;
 	
 	void GrowTail();
 	void UpdateAllBodyParts();
