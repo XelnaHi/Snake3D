@@ -28,3 +28,8 @@ float USnakeGameInstance::GetSnakePlayerData(const int32 PlayerID)
 	}
 	return 0;
 }
+
+void USnakeGameInstance::SetCurrentLevel(ESnakeGameLevel NewLevel)
+{
+	CurrentLevel = NewLevel;
+}

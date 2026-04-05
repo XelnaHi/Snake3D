@@ -6,6 +6,7 @@
 #include "Engine/GameInstance.h"
 #include "SnakeGameInstance.generated.h"
 
+enum class ESnakeGameLevel : uint8;
 enum class ESnakeGameState : uint8;
 /**
  * 
@@ -36,10 +37,15 @@ public:
 	UFUNCTION(BlueprintCallable, Category="Persistent Player Data")
 	float GetSnakePlayerData(int32 PlayerID);
 	
+	void SetCurrentLevel(ESnakeGameLevel NewLevel);
+	ESnakeGameLevel GetCurrentLevel() const {return CurrentLevel;}
+	
 private:
 	UPROPERTY(EditAnywhere, Category="Persistent Player Data")
 	FPlayerPersistentData SnakePlayerData;
 	
 	TMap<int32, float> SnakePlayerMap;
+	
+	ESnakeGameLevel CurrentLevel;
 
 };

@@ -20,9 +20,6 @@ public:
 	UFUNCTION()
 	void HandleGameStateChanged(ESnakeGameState NewState);
 
-	void StartGame();
-	void ShowMainMenu();
-
 	UPROPERTY(EditAnywhere, Category = "EnhancedInput")
 	UInputMappingContext* InputMapping;
 	
@@ -37,6 +34,5 @@ public:
 	
 protected:
 	void virtual SetupInputComponent() override;
-	void StartOutro();
 	void virtual BeginPlay() override;
 };
