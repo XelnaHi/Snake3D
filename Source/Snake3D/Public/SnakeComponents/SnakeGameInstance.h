@@ -41,6 +41,9 @@ public:
 	ESnakeGameLevel GetCurrentLevel() const {return CurrentLevel;}
 	
 private:
+	UFUNCTION(BlueprintCallable, Category="Persistent Player Data")
+	bool ResetSnakeGameInstanceData();
+	
 	UPROPERTY(EditAnywhere, Category="Persistent Player Data")
 	FPlayerPersistentData SnakePlayerData;
 	

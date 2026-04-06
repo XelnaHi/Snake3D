@@ -3,6 +3,8 @@
 
 #include "SnakeComponents/SnakeGameInstance.h"
 
+#include "SnakeComponents/SnakeState.h"
+
 void USnakeGameInstance::SetSnakePlayerData(const float Score, const int32 PlayerID)
 {
 	if (SnakePlayerMap.Contains(PlayerID))
@@ -32,4 +34,12 @@ float USnakeGameInstance::GetSnakePlayerData(const int32 PlayerID)
 void USnakeGameInstance::SetCurrentLevel(ESnakeGameLevel NewLevel)
 {
 	CurrentLevel = NewLevel;
+}
+
+bool USnakeGameInstance::ResetSnakeGameInstanceData()
+{
+	SnakePlayerMap.Empty();
+	CurrentLevel = ESnakeGameLevel::FirstLevel;
+	
+	return false;
 }
