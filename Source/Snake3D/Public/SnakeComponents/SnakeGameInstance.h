@@ -18,7 +18,7 @@ struct FPlayerPersistentData
 	int32 Score;
 	
 	UPROPERTY(BlueprintReadWrite, Category="Persistent Player Data")
-	ESnakeGameState SnakeGameState; 
+	float CurrentMoveSpeed = 650.0f;
 	
 	GENERATED_BODY()
 };
@@ -30,12 +30,15 @@ class SNAKE3D_API USnakeGameInstance : public UGameInstance
 	
 public:
 	UFUNCTION(BlueprintCallable, Category="Persistent Player Data")
-	void SetSnakePlayerData(const float Score, int32 PlayerID);
+	void SetInstancedSnakePlayerScore(const float NewScore, int32 PlayerID);
+	
+	UFUNCTION(BlueprintCallable, Category="Persistent Player Data")
+	void SetInstancedSnakePlayerSpeed(const float NewSpeed, int32 PlayerID);
 	
 	void AddPlayerToDataMap(const int32 PlayerID);
 	
 	UFUNCTION(BlueprintCallable, Category="Persistent Player Data")
-	float GetSnakePlayerData(int32 PlayerID);
+	FPlayerPersistentData GetSnakePlayerData(int32 PlayerID);
 	
 	void SetCurrentLevel(ESnakeGameLevel NewLevel);
 	ESnakeGameLevel GetCurrentLevel() const {return CurrentLevel;}
@@ -46,8 +49,8 @@ private:
 	
 	UPROPERTY(EditAnywhere, Category="Persistent Player Data")
 	FPlayerPersistentData SnakePlayerData;
-	
-	TMap<int32, float> SnakePlayerMap;
+
+	TMap<int32, FPlayerPersistentData> SnakePlayerMap;
 	
 	ESnakeGameLevel CurrentLevel;
 

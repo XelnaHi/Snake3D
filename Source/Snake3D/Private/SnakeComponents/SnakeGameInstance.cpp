@@ -5,30 +5,37 @@
 
 #include "SnakeComponents/SnakeState.h"
 
-void USnakeGameInstance::SetSnakePlayerData(const float Score, const int32 PlayerID)
+void USnakeGameInstance::SetInstancedSnakePlayerScore(const float NewScore, const int32 PlayerID)
 {
 	if (SnakePlayerMap.Contains(PlayerID))
 	{
-		SnakePlayerMap[PlayerID] = Score;
+		SnakePlayerMap[PlayerID].Score = NewScore;
 	}
-	SnakePlayerData.Score = Score;
+}
+
+void USnakeGameInstance::SetInstancedSnakePlayerSpeed(const float NewSpeed, int32 PlayerID)
+{
+	if (SnakePlayerMap.Contains(PlayerID))
+	{
+		SnakePlayerMap[PlayerID].CurrentMoveSpeed = NewSpeed;
+	}
 }
 
 void USnakeGameInstance::AddPlayerToDataMap(const int32 PlayerID)
 {
 	if (!SnakePlayerMap.Contains(PlayerID))
 	{
-		SnakePlayerMap.Add(PlayerID, 0);
+		SnakePlayerMap.Add(PlayerID);
 	}
 }
 
-float USnakeGameInstance::GetSnakePlayerData(const int32 PlayerID)
+FPlayerPersistentData USnakeGameInstance::GetSnakePlayerData(const int32 PlayerID)
 {
 	if (SnakePlayerMap.Contains(PlayerID))
 	{
 		return SnakePlayerMap[PlayerID];
 	}
-	return 0;
+	return FPlayerPersistentData();
 }
 
 void USnakeGameInstance::SetCurrentLevel(ESnakeGameLevel NewLevel)

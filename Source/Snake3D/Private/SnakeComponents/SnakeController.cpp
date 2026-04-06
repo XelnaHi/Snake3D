@@ -7,6 +7,7 @@
 #include "EnhancedInputSubsystems.h"
 #include "Kismet/GameplayStatics.h"
 #include "SnakeComponents/SnakeCharacter.h"
+#include "Kismet/KismetSystemLibrary.h"
 #include "SnakeComponents/SnakeGameInstance.h"
 #include "SnakeComponents/SnakeGameMode.h"
 
@@ -53,6 +54,8 @@ void ASnakeController::BeginPlay()
 	{
 		Subsystem->AddMappingContext(InputMapping, 0);
 	}
+	
+	
 
 	Super::BeginPlay();
 	

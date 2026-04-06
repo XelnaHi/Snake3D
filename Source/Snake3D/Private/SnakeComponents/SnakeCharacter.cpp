@@ -10,6 +10,7 @@
 #include "GameFramework/SpringArmComponent.h"
 #include "SnakeComponents/SnakeTail.h"
 #include "kismet/KismetMathLibrary.h"
+#include "SnakeComponents/SnakeGameInstance.h"
 
 
 ASnakeCharacter::ASnakeCharacter()
@@ -60,7 +61,7 @@ void ASnakeCharacter::SpawnTail(const TSubclassOf<ASnakeTail> TailClass)
 
 		// Scale of actor has been set in SnakeTailActor BP.
 		ASnakeTail* TailPart = GetWorld()->SpawnActor<ASnakeTail>(TailClass, TempLocation, Rotation, SpawnInfo);
-		
+
 		TempLocation = Location;
 
 		SnakeTails.Add(TailPart);
@@ -74,7 +75,8 @@ void ASnakeCharacter::GrowTail()
 	if (!LastBodyPart) return;
 
 	const FVector PreviousLocation = LastBodyPart->GetActorLocation();
-	const FVector NewLocation = FVector(PreviousLocation.X - TailSegmentDistance, PreviousLocation.Y, PreviousLocation.Z);
+	const FVector NewLocation = FVector(PreviousLocation.X - TailSegmentDistance, PreviousLocation.Y,
+	                                    PreviousLocation.Z);
 	const FRotator Rotation = FRotator(0.0f, 0.0f, 0.0f);
 	const FTransform NewTransform = LastBodyPart->GetTransform();
 
@@ -138,13 +140,49 @@ void ASnakeCharacter::Turn(const FInputActionValue& Value)
 }
 
 
-
-
 void ASnakeCharacter::Tick(float DeltaTime)
 {
 	if (!bCanMove) return;
 	Super::Tick(DeltaTime);
-	AddMovementInput(GetActorForwardVector(), MoveSpeed * DeltaTime);
+
+	AddMovementInput(GetActorForwardVector(), 1.0f);
+
 	UpdateAllBodyParts();
 }
 
+void ASnakeCharacter::PossessedBy(AController* NewController)
+{
+	Super::PossessedBy(NewController);
+	
+	USnakeGameInstance* SnakeGameInstance = GetGameInstance<USnakeGameInstance>();
+	APlayerController* PC = Cast<APlayerController>(GetController());
+
+	if (SnakeGameInstance && PC)
+	{
+		if (ULocalPlayer* LocalPlayer = PC->GetLocalPlayer())
+		{
+			const int32 ControllerID = LocalPlayer->GetControllerId();
+			FPlayerPersistentData PersistentData = SnakeGameInstance->GetSnakePlayerData(ControllerID);
+			MoveSpeed = PersistentData.CurrentMoveSpeed;
+			GetCharacterMovement()->MaxWalkSpeed = PersistentData.CurrentMoveSpeed;
+		}
+	}
+}
+
+void ASnakeCharacter::IncreaseMoveSpeed(const float Multiplier)
+{
+	MoveSpeed *= Multiplier;
+	GetCharacterMovement()->MaxWalkSpeed = MoveSpeed;
+	
+	USnakeGameInstance* SnakeGameInstance = GetGameInstance<USnakeGameInstance>();
+	APlayerController* PC = Cast<APlayerController>(GetController());
+
+	if (SnakeGameInstance && PC)
+	{
+		if (ULocalPlayer* LocalPlayer = PC->GetLocalPlayer())
+		{
+			const int32 ControllerID = LocalPlayer->GetControllerId();
+			SnakeGameInstance->SetInstancedSnakePlayerSpeed(MoveSpeed, ControllerID);
+		}
+	}
+}

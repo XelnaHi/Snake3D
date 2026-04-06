@@ -30,9 +30,14 @@ public:
 	virtual void BeginPlay() override;
 
 	virtual void Tick(float DeltaTime) override;
+	
+	virtual void PossessedBy(AController* NewController) override;
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Movement")
 	bool bCanMove;
+	
+	UFUNCTION(BlueprintCallable, Category = "Movement")
+	void IncreaseMoveSpeed(float Multiplier);
 	
 private:
 	
@@ -42,7 +47,6 @@ private:
 	UPROPERTY(EditAnywhere, Category = "Movement")
 	float TurnSpeed = 120.0f;
 
-	
 	UPROPERTY(EditAnywhere, Category = "Camera")
 	class USpringArmComponent* CameraBoom;
 	
