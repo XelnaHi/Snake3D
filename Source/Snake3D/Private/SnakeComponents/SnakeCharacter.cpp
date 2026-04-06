@@ -153,11 +153,11 @@ void ASnakeCharacter::PossessedBy(AController* NewController)
 	Super::PossessedBy(NewController);
 	
 	USnakeGameInstance* SnakeGameInstance = GetGameInstance<USnakeGameInstance>();
-	APlayerController* PC = Cast<APlayerController>(GetController());
+	const APlayerController* PC = Cast<APlayerController>(GetController());
 
 	if (SnakeGameInstance && PC)
 	{
-		if (ULocalPlayer* LocalPlayer = PC->GetLocalPlayer())
+		if (const ULocalPlayer* LocalPlayer = PC->GetLocalPlayer())
 		{
 			const int32 ControllerID = LocalPlayer->GetControllerId();
 			FPlayerPersistentData PersistentData = SnakeGameInstance->GetSnakePlayerData(ControllerID);
@@ -173,11 +173,10 @@ void ASnakeCharacter::IncreaseMoveSpeed(const float Multiplier)
 	GetCharacterMovement()->MaxWalkSpeed = MoveSpeed;
 	
 	USnakeGameInstance* SnakeGameInstance = GetGameInstance<USnakeGameInstance>();
-	APlayerController* PC = Cast<APlayerController>(GetController());
 
-	if (SnakeGameInstance && PC)
+	if (const APlayerController* PC = Cast<APlayerController>(GetController()); SnakeGameInstance && PC)
 	{
-		if (ULocalPlayer* LocalPlayer = PC->GetLocalPlayer())
+		if (const ULocalPlayer* LocalPlayer = PC->GetLocalPlayer())
 		{
 			const int32 ControllerID = LocalPlayer->GetControllerId();
 			SnakeGameInstance->SetInstancedSnakePlayerSpeed(MoveSpeed, ControllerID);

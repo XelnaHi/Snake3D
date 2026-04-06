@@ -29,32 +29,27 @@ class SNAKE3D_API ASnakeState : public APlayerState
 
 public:
 	DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnScoreUpdated, float, NewScore);
+
 	UPROPERTY(BlueprintAssignable)
-	FOnScoreUpdated OnScoreUpdated; 
-	
+	FOnScoreUpdated OnScoreUpdated;
+
 	DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnReachedTargetScore, ESnakeGameLevel, CurrentLevel);
 
 	UPROPERTY(BlueprintAssignable)
 	FOnReachedTargetScore OnReachedTargetScore;
-	
+
 protected:
 	virtual void BeginPlay() override;
 
 private:
 	UFUNCTION(BlueprintCallable)
-	void SetPlayerStateScore(const float NewScore)
-	{
-		SetScore(NewScore);
-	}
+	void SetPlayerStateScore(const float NewScore) { SetScore(NewScore); }
 
-	ESnakeGameLevel CurrentLevel = ESnakeGameLevel::FirstLevel;
-
-
-
-	TObjectPtr<USnakeGameInstance> GameInstance;
-	TObjectPtr<ASnakeGameMode> SnakeGameMode;
-	
 	UFUNCTION(BlueprintCallable)
 	void UpdateScore(const int32 SnakeID);
 
+	ESnakeGameLevel CurrentLevel = ESnakeGameLevel::FirstLevel;
+
+	TObjectPtr<USnakeGameInstance> GameInstance;
+	TObjectPtr<ASnakeGameMode> SnakeGameMode;
 };

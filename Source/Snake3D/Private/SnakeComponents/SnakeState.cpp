@@ -13,9 +13,6 @@ void ASnakeState::BeginPlay()
 	Super::BeginPlay();
 }
 
-
-
-
 void ASnakeState::UpdateScore(const int32 SnakeID)
 {
 	const float InstancedScore = GameInstance->GetSnakePlayerData(SnakeID).Score + 1;

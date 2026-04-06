@@ -2,16 +2,12 @@
 
 
 #include "SpawnComponents/ObstacleSpawner.h"
-
 #include "Components/BoxComponent.h"
 #include "kismet/KismetMathLibrary.h"
 
-
-// Sets default values
 AObstacleSpawner::AObstacleSpawner()
 {
 	PrimaryActorTick.bCanEverTick = true;
-	
 	
 	SpawnBox = CreateDefaultSubobject<UBoxComponent>(TEXT("ObstacleSpawnBox"));
 	SpawnBox->SetupAttachment(RootComponent);
@@ -45,7 +41,7 @@ void AObstacleSpawner::SpawnObstacle() const
 	}
 }
 
-void AObstacleSpawner::Tick(float DeltaTime)
+void AObstacleSpawner::Tick(const float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 }

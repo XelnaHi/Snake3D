@@ -2,8 +2,6 @@
 
 
 #include "SnakeComponents/SnakeGameMode.h"
-
-#include "GeometryCollection/GeometryCollectionComponent.h"
 #include "SnakeComponents/SnakeGameInstance.h"
 #include "Kismet/GameplayStatics.h"
 #include "SnakeComponents/SnakeState.h"
@@ -20,13 +18,12 @@ void ASnakeGameMode::PostLogin(APlayerController* NewPlayer)
 
 	if (!NewPlayer) return;
 
-	ULocalPlayer* LocalPlayer = NewPlayer->GetLocalPlayer();
+	const ULocalPlayer* LocalPlayer = NewPlayer->GetLocalPlayer();
 	if (!LocalPlayer) return;
 
-	int32 PlayerIndex = LocalPlayer->GetControllerId();
+	const int32 PlayerIndex = LocalPlayer->GetControllerId();
 
-	USnakeGameInstance* SnakeGameInstance = GetGameInstance<USnakeGameInstance>();
-	if (SnakeGameInstance)
+	if (USnakeGameInstance* SnakeGameInstance = GetGameInstance<USnakeGameInstance>())
 	{
 		SnakeGameInstance->AddPlayerToDataMap(PlayerIndex);
 	}
@@ -47,7 +44,7 @@ void ASnakeGameMode::BeginPlay()
 	
 }
 
-void ASnakeGameMode::HandleReachedTargetScore(ESnakeGameLevel Level)
+void ASnakeGameMode::HandleReachedTargetScore(const ESnakeGameLevel Level) // Cant be made const. Is dynamically assigned in PostLogin.
 {
 	switch (Level)
 	{

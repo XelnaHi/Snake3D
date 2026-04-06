@@ -2,12 +2,9 @@
 
 
 #include "SpawnComponents/FoodSpawner.h"
-
 #include "Components/BoxComponent.h"
 #include "kismet/KismetMathLibrary.h"
 
-
-// Sets default values
 AFoodSpawner::AFoodSpawner()
 {
 	PrimaryActorTick.bCanEverTick = true;

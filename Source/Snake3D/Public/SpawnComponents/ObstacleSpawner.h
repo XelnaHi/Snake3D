@@ -14,7 +14,7 @@ class SNAKE3D_API AObstacleSpawner : public AActor
 
 public:
 	AObstacleSpawner();
-	void virtual Tick(float DeltaSeconds) override;	
+	void virtual Tick(float DeltaTime) override;	
 
 	
 protected:

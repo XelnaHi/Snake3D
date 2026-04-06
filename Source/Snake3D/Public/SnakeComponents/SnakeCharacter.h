@@ -4,7 +4,6 @@
 
 #include "CoreMinimal.h"
 #include "InputActionValue.h"
-#include "SnakeController.h"
 #include "SnakeTail.h"
 #include "GameFramework/Character.h"
 #include "SnakeCharacter.generated.h"

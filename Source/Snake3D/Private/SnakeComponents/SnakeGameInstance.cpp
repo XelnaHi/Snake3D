@@ -2,7 +2,6 @@
 
 
 #include "SnakeComponents/SnakeGameInstance.h"
-
 #include "SnakeComponents/SnakeState.h"
 
 void USnakeGameInstance::SetInstancedSnakePlayerScore(const float NewScore, const int32 PlayerID)
