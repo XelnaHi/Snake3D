@@ -21,12 +21,7 @@ class SNAKE3D_API ASnakeCharacter : public ACharacter
 public:
 	ASnakeCharacter();
 
-protected:
 	
-	float CurrentForwardInput;
-
-public:
-
 	virtual void BeginPlay() override;
 
 	virtual void Tick(float DeltaTime) override;
@@ -39,6 +34,10 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Movement")
 	void IncreaseMoveSpeed(float Multiplier);
 	
+protected:
+	
+	float CurrentForwardInput;
+
 private:
 	
 	UPROPERTY(EditAnywhere, Category = "Movement")

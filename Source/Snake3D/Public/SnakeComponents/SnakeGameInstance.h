@@ -8,9 +8,11 @@
 
 enum class ESnakeGameLevel : uint8;
 enum class ESnakeGameState : uint8;
+
 /**
  * 
  */
+
 USTRUCT(BlueprintType)
 struct FPlayerPersistentData
 {
@@ -45,7 +47,7 @@ public:
 	
 private:
 	UFUNCTION(BlueprintCallable, Category="Persistent Player Data")
-	bool ResetSnakeGameInstanceData();
+	void ResetSnakeGameInstanceData();
 	
 	UPROPERTY(EditAnywhere, Category="Persistent Player Data")
 	FPlayerPersistentData SnakePlayerData;

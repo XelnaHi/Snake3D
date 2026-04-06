@@ -7,11 +7,6 @@
 #include "EnhancedInputSubsystems.h"
 #include "Kismet/GameplayStatics.h"
 #include "SnakeComponents/SnakeCharacter.h"
-#include "Kismet/KismetSystemLibrary.h"
-#include "SnakeComponents/SnakeGameInstance.h"
-#include "SnakeComponents/SnakeGameMode.h"
-
-
 
 void ASnakeController::SetupInputComponent()
 {
@@ -26,7 +21,7 @@ void ASnakeController::SetupInputComponent()
 	}
 }
 
-void ASnakeController::TurnP1(const FInputActionValue& Value) 
+void ASnakeController::TurnP1(const FInputActionValue& Value) // Cant be made const. It's assigned in SetupInputComponent.
 {
 	if (ASnakeCharacter* Snake = Cast<ASnakeCharacter>(GetPawn()))
 	{
@@ -34,7 +29,7 @@ void ASnakeController::TurnP1(const FInputActionValue& Value)
 	}
 }
 
-void ASnakeController::TurnP2(const FInputActionValue& Value)
+void ASnakeController::TurnP2(const FInputActionValue& Value) // Cant be made const. It's assigned in SetupInputComponent.
 {
 	if (APlayerController* PC1 = UGameplayStatics::GetPlayerController(this, 1))
 	{
@@ -54,9 +49,6 @@ void ASnakeController::BeginPlay()
 	{
 		Subsystem->AddMappingContext(InputMapping, 0);
 	}
-	
-	
 
 	Super::BeginPlay();
-	
 }

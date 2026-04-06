@@ -6,6 +6,7 @@
 #include "GameFramework/GameModeBase.h"
 #include "SnakeGameMode.generated.h"
 
+enum class ESnakeGameLevel: uint8;
 /**
  * 
  */
@@ -26,6 +27,11 @@ class SNAKE3D_API ASnakeGameMode : public AGameModeBase
 	GENERATED_BODY()
 
 	public:
+	
+	float GetLevelOneScoreThreshold() const { return LevelOneScoreThreshold; };
+	float GetLevelTwoScoreThreshold() const { return LevelTwoScoreThreshold; };
+	float GetLevelThreeScoreThreshold() const { return LevelThreeScoreThreshold; };
+	
 	UPROPERTY(BlueprintReadOnly)
 	ESnakeGameState CurrentState;
 	
@@ -40,5 +46,18 @@ class SNAKE3D_API ASnakeGameMode : public AGameModeBase
 protected:
 	virtual void BeginPlay() override;
 
+private:
+	UPROPERTY(EditAnywhere, Category = "Level Score Threshold")
+	float LevelOneScoreThreshold = 10;
+	
+	UPROPERTY(EditAnywhere, Category = "Level Score Threshold")
+	float LevelTwoScoreThreshold = 15;
+	
+	UPROPERTY(EditAnywhere, Category = "Level Score Threshold")
+	float LevelThreeScoreThreshold = 20;
+	
+	UFUNCTION()
+	void HandleReachedTargetScore(ESnakeGameLevel Level);
+	
 };
 	

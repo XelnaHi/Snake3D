@@ -12,12 +12,7 @@ class SNAKE3D_API ASnakeTail : public AActor
 {
 	GENERATED_BODY()
 
-public:
-	// Sets default values for this actor's properties
-	ASnakeTail();
-
 protected:
-	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
 };

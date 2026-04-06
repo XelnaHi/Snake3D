@@ -43,10 +43,8 @@ void USnakeGameInstance::SetCurrentLevel(ESnakeGameLevel NewLevel)
 	CurrentLevel = NewLevel;
 }
 
-bool USnakeGameInstance::ResetSnakeGameInstanceData()
+void USnakeGameInstance::ResetSnakeGameInstanceData()
 {
 	SnakePlayerMap.Empty();
 	CurrentLevel = ESnakeGameLevel::FirstLevel;
-	
-	return false;
 }

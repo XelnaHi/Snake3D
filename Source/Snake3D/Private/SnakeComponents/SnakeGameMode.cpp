@@ -3,12 +3,14 @@
 
 #include "SnakeComponents/SnakeGameMode.h"
 
+#include "GeometryCollection/GeometryCollectionComponent.h"
 #include "SnakeComponents/SnakeGameInstance.h"
+#include "Kismet/GameplayStatics.h"
+#include "SnakeComponents/SnakeState.h"
 
 void ASnakeGameMode::SetGameState(ESnakeGameState NewState)
 {
 	CurrentState = NewState;
-	UE_LOG(LogTemp, Warning, TEXT("GameState changed to %d"), (int32)NewState);
 	OnGameStateChanged.Broadcast(NewState);
 }
 
@@ -28,11 +30,32 @@ void ASnakeGameMode::PostLogin(APlayerController* NewPlayer)
 	{
 		SnakeGameInstance->AddPlayerToDataMap(PlayerIndex);
 	}
+	
+	if (ASnakeState* SnakeState = NewPlayer->GetPlayerState<ASnakeState>())
+	{
+		SnakeState->OnReachedTargetScore.AddDynamic(this, &ASnakeGameMode::HandleReachedTargetScore);
+	}
 }
 
 void ASnakeGameMode::BeginPlay()
 {
+	SetGameState(ESnakeGameState::MainMenu);
+	UGameplayStatics::CreatePlayer(GetWorld(), 1, true);
+
+	
 	Super::BeginPlay();
 	
-	SetGameState(ESnakeGameState::MainMenu);
+}
+
+void ASnakeGameMode::HandleReachedTargetScore(ESnakeGameLevel Level)
+{
+	switch (Level)
+	{
+	case ESnakeGameLevel::SecondLevel:
+			UGameplayStatics::OpenLevel(GetWorld(),"Lvl_ThirdPerson");
+		break;
+		case ESnakeGameLevel::ThirdLevel:
+			UGameplayStatics::OpenLevel(GetWorld(),"Lvl_SnakeLevel_01");
+		break;
+	}
 }

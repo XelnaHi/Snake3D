@@ -30,7 +30,8 @@ public:
 	
 protected:
 	void virtual SetupInputComponent() override;
+	void virtual BeginPlay() override;
+	
 	void TurnP1(const FInputActionValue& Value);
 	void TurnP2(const FInputActionValue& Value);
-	void virtual BeginPlay() override;
 };

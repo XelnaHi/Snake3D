@@ -4,7 +4,6 @@
 #include "Snake3D/Public/SnakeComponents/SnakeCharacter.h"
 
 #include "EnhancedInputComponent.h"
-#include "EnhancedInputSubsystems.h"
 #include "Camera/CameraComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/SpringArmComponent.h"
@@ -59,7 +58,6 @@ void ASnakeCharacter::SpawnTail(const TSubclassOf<ASnakeTail> TailClass)
 		TempLocation -= SegmentLocation;
 		FRotator Rotation = FRotator(0.0f, 0.0f, 0.0f);
 
-		// Scale of actor has been set in SnakeTailActor BP.
 		ASnakeTail* TailPart = GetWorld()->SpawnActor<ASnakeTail>(TailClass, TempLocation, Rotation, SpawnInfo);
 
 		TempLocation = Location;

@@ -2,63 +2,42 @@
 
 
 #include "SnakeComponents/SnakeState.h"
-
 #include "SnakeComponents/SnakeGameInstance.h"
-
-
-void ASnakeState::SetSnakeScore(const int32 SnakeID, const float NewScore)
-{
-	SetScore(NewScore);
-	
-	if (GetScore() == 5 && CurrentLevel == ESnakeGameLevel::FirstLevel)
-	{
-		CurrentLevel = ESnakeGameLevel::SecondLevel;
-		GameInstance->SetInstancedSnakePlayerScore(NewScore, SnakeID);
-		OnReachedTargetScore.Broadcast(CurrentLevel);
-	}
-	else if (GetScore() == 10 && CurrentLevel == ESnakeGameLevel::SecondLevel)
-	{
-		CurrentLevel = ESnakeGameLevel::ThirdLevel;
-		OnReachedTargetScore.Broadcast(CurrentLevel);
-	}
-	else if (GetScore() == 15 && CurrentLevel == ESnakeGameLevel::ThirdLevel)
-	{
-		OnReachedTargetScore.Broadcast(CurrentLevel);
-	}
-	
-}
+#include "SnakeComponents/SnakeGameMode.h"
 
 void ASnakeState::BeginPlay()
 {
 	GameInstance = Cast<USnakeGameInstance>(GetGameInstance());
+	SnakeGameMode = Cast<ASnakeGameMode>(GetWorld()->GetAuthGameMode());
 	CurrentLevel = GameInstance->GetCurrentLevel();
 	Super::BeginPlay();
 }
 
-void ASnakeState::UpdateScore(const int32 SnakeID){
-	const float OldScore = GetScore();
-	const float NewScore = OldScore + 1;
-	
+
+
+
+void ASnakeState::UpdateScore(const int32 SnakeID)
+{
 	const float InstancedScore = GameInstance->GetSnakePlayerData(SnakeID).Score + 1;
 	SetScore(InstancedScore);
-	
+
 	GameInstance->SetInstancedSnakePlayerScore(InstancedScore, SnakeID);
 	OnScoreUpdated.Broadcast(InstancedScore);
-	
-	if (NewScore == 5 && CurrentLevel == ESnakeGameLevel::FirstLevel)
+
+	if (InstancedScore == SnakeGameMode->GetLevelOneScoreThreshold() && CurrentLevel == ESnakeGameLevel::FirstLevel)
 	{
 		CurrentLevel = ESnakeGameLevel::SecondLevel;
 		GameInstance->SetCurrentLevel(ESnakeGameLevel::SecondLevel);
 		GameInstance->SetInstancedSnakePlayerScore(InstancedScore, SnakeID);
 		OnReachedTargetScore.Broadcast(CurrentLevel);
 	}
-	else if (InstancedScore == 10 && CurrentLevel == ESnakeGameLevel::SecondLevel)
+	else if (InstancedScore == SnakeGameMode->GetLevelTwoScoreThreshold() && CurrentLevel == ESnakeGameLevel::SecondLevel)
 	{
 		CurrentLevel = ESnakeGameLevel::ThirdLevel;
 		GameInstance->SetCurrentLevel(ESnakeGameLevel::ThirdLevel);
 		OnReachedTargetScore.Broadcast(CurrentLevel);
 	}
-	else if (InstancedScore == 15 && CurrentLevel == ESnakeGameLevel::ThirdLevel)
+	else if (InstancedScore == SnakeGameMode->GetLevelThreeScoreThreshold() && CurrentLevel == ESnakeGameLevel::ThirdLevel)
 	{
 		OnReachedTargetScore.Broadcast(CurrentLevel);
 	}
