@@ -33,8 +33,7 @@ public:
 	UPROPERTY(BlueprintAssignable)
 	FOnScoreUpdated OnScoreUpdated;
 
-	DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnReachedTargetScore, ESnakeGameLevel, CurrentLevel);
-
+	DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnReachedTargetScore);
 	UPROPERTY(BlueprintAssignable)
 	FOnReachedTargetScore OnReachedTargetScore;
 

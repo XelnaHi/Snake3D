@@ -2,7 +2,6 @@
 
 
 #include "SnakeComponents/SnakeGameInstance.h"
-#include "SnakeComponents/SnakeState.h"
 
 void USnakeGameInstance::SetInstancedSnakePlayerScore(const float NewScore, const int32 PlayerID)
 {
@@ -17,6 +16,14 @@ void USnakeGameInstance::SetInstancedSnakePlayerSpeed(const float NewSpeed, int3
 	if (SnakePlayerMap.Contains(PlayerID))
 	{
 		SnakePlayerMap[PlayerID].CurrentMoveSpeed = NewSpeed;
+	}
+}
+
+void USnakeGameInstance::SetInstancedSnakePlayerLerp(const float NewLerpTime, int32 PlayerID)
+{
+	if (SnakePlayerMap.Contains(PlayerID))
+	{
+		SnakePlayerMap[PlayerID].LerpTime = NewLerpTime;
 	}
 }
 
@@ -37,13 +44,27 @@ FPlayerPersistentData USnakeGameInstance::GetSnakePlayerData(const int32 PlayerI
 	return FPlayerPersistentData();
 }
 
-void USnakeGameInstance::SetCurrentLevel(ESnakeGameLevel NewLevel)
+
+void USnakeGameInstance::IncreaseLevelScoreThreshold()
 {
-	CurrentLevel = NewLevel;
+	LevelScoreThreshold *= LevelScoreThresholdMultiplier;
 }
 
-void USnakeGameInstance::ResetSnakeGameInstanceData()
+void USnakeGameInstance::ResetSnakeGameInstanceData(const bool bShouldResetPlayers)
 {
 	SnakePlayerMap.Empty();
-	CurrentLevel = ESnakeGameLevel::FirstLevel;
+	LevelScoreThreshold = 10;
+	bIsCoopMode = false;
+
+	if (bShouldResetPlayers)
+	{
+		TArray<ULocalPlayer*> LocalSnakePlayers = GetLocalPlayers();
+		for (int32 i = LocalSnakePlayers.Num() - 1; i >= 1; --i)
+		{
+			ULocalPlayer* ExtraPlayer = LocalSnakePlayers[i];
+			if (!ExtraPlayer) continue;
+
+			RemoveLocalPlayer(ExtraPlayer);
+		}
+	}
 }

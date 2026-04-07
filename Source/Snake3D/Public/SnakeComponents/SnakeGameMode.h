@@ -10,13 +10,13 @@ enum class ESnakeGameLevel: uint8;
 /**
  * 
  */
-	UENUM(BlueprintType)
-	enum class ESnakeGameState : uint8
-	{
-		MainMenu,
-		Game,
-		Outro
-	};
+UENUM(BlueprintType)
+enum class ESnakeGameState : uint8
+{
+	MainMenu,
+	Game,
+	Outro
+};
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnGameStateChanged, ESnakeGameState, NewState);
 
@@ -26,38 +26,25 @@ class SNAKE3D_API ASnakeGameMode : public AGameModeBase
 {
 	GENERATED_BODY()
 
-	public:
-	
-	float GetLevelOneScoreThreshold() const { return LevelOneScoreThreshold; };
-	float GetLevelTwoScoreThreshold() const { return LevelTwoScoreThreshold; };
-	float GetLevelThreeScoreThreshold() const { return LevelThreeScoreThreshold; };
-	
+public:
 	UPROPERTY(BlueprintReadOnly)
 	ESnakeGameState CurrentState;
-	
+
 	UPROPERTY(BlueprintAssignable)
-	FOnGameStateChanged OnGameStateChanged; 
+	FOnGameStateChanged OnGameStateChanged;
 
 	UFUNCTION(BlueprintCallable)
 	void SetGameState(ESnakeGameState NewState);
-	
+
 	void virtual PostLogin(APlayerController* NewPlayer) override;
 	
+	UFUNCTION()
+	void HandleReachedTargetScore();
+
 protected:
 	virtual void BeginPlay() override;
 
 private:
-	UPROPERTY(EditAnywhere, Category = "Level Score Threshold")
-	float LevelOneScoreThreshold = 10;
-	
-	UPROPERTY(EditAnywhere, Category = "Level Score Threshold")
-	float LevelTwoScoreThreshold = 15;
-	
-	UPROPERTY(EditAnywhere, Category = "Level Score Threshold")
-	float LevelThreeScoreThreshold = 20;
-	
-	UFUNCTION()
-	void HandleReachedTargetScore(ESnakeGameLevel Level);
-	
+	UPROPERTY(EditAnywhere, Category="Level Management")
+	TArray<FName> LevelNames;
 };
-	

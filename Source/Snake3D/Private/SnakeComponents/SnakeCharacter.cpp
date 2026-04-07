@@ -60,7 +60,7 @@ void ASnakeCharacter::SpawnTail(const TSubclassOf<ASnakeTail> TailClass)
 		ASnakeTail* TailPart = GetWorld()->SpawnActor<ASnakeTail>(TailClass, TempLocation, Rotation, SpawnInfo);
 
 		TempLocation = Location;
-		
+
 		const APlayerController* PC = Cast<APlayerController>(GetController());
 		if (PC)
 		{
@@ -219,7 +219,8 @@ void ASnakeCharacter::PossessedBy(AController* NewController)
 void ASnakeCharacter::IncreaseMoveSpeed(const float Multiplier)
 {
 	MoveSpeed *= Multiplier;
-	GetCharacterMovement()->MaxWalkSpeed = MoveSpeed;
+	LerpTime = LerpTime * (Multiplier + 0.15f);
+		GetCharacterMovement()->MaxWalkSpeed = MoveSpeed;
 
 	USnakeGameInstance* SnakeGameInstance = GetGameInstance<USnakeGameInstance>();
 
@@ -229,6 +230,7 @@ void ASnakeCharacter::IncreaseMoveSpeed(const float Multiplier)
 		{
 			const int32 ControllerID = LocalPlayer->GetControllerId();
 			SnakeGameInstance->SetInstancedSnakePlayerSpeed(MoveSpeed, ControllerID);
+			SnakeGameInstance->SetInstancedSnakePlayerLerp(LerpTime, ControllerID);
 		}
 	}
 }

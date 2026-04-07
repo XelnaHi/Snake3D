@@ -9,7 +9,6 @@ void ASnakeState::BeginPlay()
 {
 	GameInstance = Cast<USnakeGameInstance>(GetGameInstance());
 	SnakeGameMode = Cast<ASnakeGameMode>(GetWorld()->GetAuthGameMode());
-	CurrentLevel = GameInstance->GetCurrentLevel();
 	Super::BeginPlay();
 }
 
@@ -19,23 +18,13 @@ void ASnakeState::UpdateScore(const int32 SnakeID)
 	SetScore(InstancedScore);
 
 	GameInstance->SetInstancedSnakePlayerScore(InstancedScore, SnakeID);
-	OnScoreUpdated.Broadcast(InstancedScore);
+	OnScoreUpdated.Broadcast(InstancedScore); // Subscribed to by WBP_ScoreLabel
 
-	if (InstancedScore == SnakeGameMode->GetLevelOneScoreThreshold() && CurrentLevel == ESnakeGameLevel::FirstLevel)
+	if (InstancedScore == GameInstance->GetLevelScoreThreshold())
 	{
-		CurrentLevel = ESnakeGameLevel::SecondLevel;
-		GameInstance->SetCurrentLevel(ESnakeGameLevel::SecondLevel);
 		GameInstance->SetInstancedSnakePlayerScore(InstancedScore, SnakeID);
-		OnReachedTargetScore.Broadcast(CurrentLevel);
+		GameInstance->IncreaseLevelScoreThreshold();
+		OnReachedTargetScore.Broadcast();
 	}
-	else if (InstancedScore == SnakeGameMode->GetLevelTwoScoreThreshold() && CurrentLevel == ESnakeGameLevel::SecondLevel)
-	{
-		CurrentLevel = ESnakeGameLevel::ThirdLevel;
-		GameInstance->SetCurrentLevel(ESnakeGameLevel::ThirdLevel);
-		OnReachedTargetScore.Broadcast(CurrentLevel);
-	}
-	else if (InstancedScore == SnakeGameMode->GetLevelThreeScoreThreshold() && CurrentLevel == ESnakeGameLevel::ThirdLevel)
-	{
-		OnReachedTargetScore.Broadcast(CurrentLevel);
-	}
+
 }

@@ -27,32 +27,47 @@ void ASnakeGameMode::PostLogin(APlayerController* NewPlayer)
 	{
 		SnakeGameInstance->AddPlayerToDataMap(PlayerIndex);
 	}
-	
+
 	if (ASnakeState* SnakeState = NewPlayer->GetPlayerState<ASnakeState>())
 	{
 		SnakeState->OnReachedTargetScore.AddDynamic(this, &ASnakeGameMode::HandleReachedTargetScore);
 	}
 }
 
+
 void ASnakeGameMode::BeginPlay()
 {
+	const USnakeGameInstance* GameInstance = Cast<USnakeGameInstance>(GetGameInstance());
 	SetGameState(ESnakeGameState::MainMenu);
-	UGameplayStatics::CreatePlayer(GetWorld(), 1, true);
 
-	
+	if (GameInstance->IsCoopMode())
+	{
+		UGameplayStatics::CreatePlayer(GetWorld(), 1, true);
+	}
+
 	Super::BeginPlay();
-	
 }
 
-void ASnakeGameMode::HandleReachedTargetScore(const ESnakeGameLevel Level) // Cant be made const. Is dynamically assigned in PostLogin.
+void ASnakeGameMode::HandleReachedTargetScore() // Cant be made const. Is dynamically assigned in PostLogin.
 {
-	switch (Level)
+	if (LevelNames.Num() == 0) return;
+
+	const FName CurrentLevel = FName(*UGameplayStatics::GetCurrentLevelName(GetWorld(), true));
+
+	TArray<FName> ValidLevels;
+
+	for (const FName& Level : LevelNames)
 	{
-	case ESnakeGameLevel::SecondLevel:
-			UGameplayStatics::OpenLevel(GetWorld(),"Lvl_SnakeLevel_02");
-		break;
-		case ESnakeGameLevel::ThirdLevel:
-			UGameplayStatics::OpenLevel(GetWorld(),"Lvl_SnakeLevel_01");
-		break;
+		if (Level != CurrentLevel)
+		{
+			ValidLevels.Add(Level);
+		}
 	}
+
+	if (ValidLevels.Num() == 0) return;
+
+	const int32 RandomIndex = FMath::RandRange(0, ValidLevels.Num() - 1);
+	const FName RandomLevel = ValidLevels[RandomIndex];
+
+	UGameplayStatics::OpenLevel(GetWorld(), RandomLevel);
 }

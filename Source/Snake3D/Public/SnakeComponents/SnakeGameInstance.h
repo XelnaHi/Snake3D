@@ -18,9 +18,11 @@ struct FPlayerPersistentData
 {
 	UPROPERTY(BlueprintReadWrite, Category="Persistent Player Data")
 	int32 Score;
-	
+
 	UPROPERTY(BlueprintReadWrite, Category="Persistent Player Data")
 	float CurrentMoveSpeed = 650.0f;
+
+	float LerpTime;
 	
 	GENERATED_BODY()
 };
@@ -29,31 +31,46 @@ UCLASS()
 class SNAKE3D_API USnakeGameInstance : public UGameInstance
 {
 	GENERATED_BODY()
-	
+
 public:
 	UFUNCTION(BlueprintCallable, Category="Persistent Player Data")
 	void SetInstancedSnakePlayerScore(const float NewScore, int32 PlayerID);
-	
+
 	UFUNCTION(BlueprintCallable, Category="Persistent Player Data")
 	void SetInstancedSnakePlayerSpeed(const float NewSpeed, int32 PlayerID);
 	
+	UFUNCTION(BlueprintCallable, Category="Persistent Player Data")
+	void SetInstancedSnakePlayerLerp(const float NewLerpTime, int32 PlayerID);
+
 	void AddPlayerToDataMap(const int32 PlayerID);
-	
+
 	UFUNCTION(BlueprintCallable, Category="Persistent Player Data")
 	FPlayerPersistentData GetSnakePlayerData(int32 PlayerID);
+
+	int32 GetLevelScoreThreshold() const { return LevelScoreThreshold; }
+	void IncreaseLevelScoreThreshold();
+
+	UPROPERTY(EditAnywhere, Category="Level Score Threshold")
+	int32 LevelScoreThreshold;
 	
-	void SetCurrentLevel(ESnakeGameLevel NewLevel);
-	ESnakeGameLevel GetCurrentLevel() const {return CurrentLevel;}
+	UPROPERTY(EditAnywhere, Category="Level Score Threshold")
+	float LevelScoreThresholdMultiplier;
+		
+	UFUNCTION(BlueprintCallable)
+	void SetCoopMode(const bool NewCoopMode) { bIsCoopMode = NewCoopMode; };
 	
+	UFUNCTION(BlueprintCallable)
+	bool IsCoopMode() const { return bIsCoopMode; };
+
 private:
 	UFUNCTION(BlueprintCallable, Category="Persistent Player Data")
-	void ResetSnakeGameInstanceData();
-	
+	void ResetSnakeGameInstanceData(bool bShouldResetPlayers);
+
 	UPROPERTY(EditAnywhere, Category="Persistent Player Data")
 	FPlayerPersistentData SnakePlayerData;
 
 	TMap<int32, FPlayerPersistentData> SnakePlayerMap;
 	
-	ESnakeGameLevel CurrentLevel;
-
+	bool bIsCoopMode;
+	
 };
