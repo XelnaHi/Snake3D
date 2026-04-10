@@ -9,7 +9,7 @@
 
 
 UCLASS()
-class SNAKE3D_API ADangerousObstacle : public AActor
+class SNAKE3D_API ADangerousObstacle : public AHazardUtilActor
 {
 	GENERATED_BODY()
 
@@ -18,8 +18,4 @@ public:
 	
 	virtual void NotifyActorBeginOverlap(AActor* OtherActor) override;
 	
-	UPROPERTY(BlueprintAssignable)
-	FOnGameOver OnGameOver;
-
-
 };
